@@ -14,3 +14,4 @@ __pycache__/
 *.pyc
 .idea/
 .DS_Store
+DEPLOY.md
