@@ -1,10 +1,4 @@
-"""
-main.py - The start button for your Life Assistant.
-Run this file. More features get added to the menu as we build them.
 
-The German tracker runs in the background by itself once you turn it on
-(menu 2 -> "Run automatically").
-"""
 
 from database import create_tables
 from collectors import food, german_tracker, trains, daily_schedule
