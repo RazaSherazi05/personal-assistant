@@ -10,11 +10,11 @@ A personal assistant that tracks the things I want to improve and I can personal
 
 | Feature | How it works |
 |---|---|
-| **Food log** | Search foods by name, look up packaged products by barcode, or enter values manually. Calories, protein, fat and carbs are calculated from the grams eaten. Data comes from [Open Food Facts](https://world.openfoodfacts.org). |
-| **German study tracker** | Clocks in automatically when my language-learning site is the active tab in Safari on my Mac, and clocks out when I switch away or go idle for 5 minutes. Runs in the background. |
-| **Weekly review** | Compares each week against my targets: calorie deficit, study hours, average protein and logging consistency. It draws day-by-day charts, records every missed target as a breach, and asks for a short note on what went wrong so I can look back for patterns. |
-| **Train departures** | Live departures, delays, cancellations and platform changes from the official Deutsche Bahn Timetables API. |
-| **Daily briefing** | A morning Mac notification with today's Apple Calendar appointments, study progress, calories left and the next train. |
+| **Food log** | Search foods by name, look up products by barcode, or enter values manually. Calories, protein, fat and carbs are calculated from the grams eaten. Data comes from [Open Food Facts](https://world.openfoodfacts.org). |
+| **German study tracker** | Clocks in automatically when my language-learning site is the active tab in Safari on my Mac, and clocks out when I switch away or go idle for 5 minutes. Always Runs in the background. |
+| **Weekly review** | Compares each week against my targets: my calorie deficit goals, my study hours, my average protein and logging consistency. It draws day-by-day charts, records every missed target as a breach, and asks for a short note on what went wrong so I can look back for patterns. |
+| **Train departures** | Live departures, delays, cancellations and platform changes from the official Deutsche Bahn Timetables API which was subscribed from the website of DB API. |
+| **Daily briefing** | A morning Mac notification with today's appointments, study progress, calories left and the next train. |
 
 ## Tech
 
