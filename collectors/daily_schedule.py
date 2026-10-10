@@ -1,17 +1,3 @@
-"""
-collectors/daily_schedule.py - Your daily briefing.
-
-Pulls together:
-  - today's appointments from Apple Calendar (synced from your iPhone)
-  - German study progress this week
-  - calories and protein left today
-  - the next train from your home station
-
-It can also send you a Mac notification every morning (menu option 3).
-
-Needs one extra library (install once in PyCharm's terminal):
-    pip install pyobjc-framework-EventKit
-"""
 
 import os
 import plistlib
@@ -20,7 +6,6 @@ import sys
 import time
 from datetime import datetime, date, timedelta
 
-# Lets this file also run on its own (for the morning notification)
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import (BASE_DIR, DAILY_CALORIE_BUDGET, WEEKLY_DEFICIT_TARGET,
@@ -29,15 +14,14 @@ from config import (BASE_DIR, DAILY_CALORIE_BUDGET, WEEKLY_DEFICIT_TARGET,
 from database import get_connection, create_tables
 import remote
 
-# Optional settings; add them to config.py to change them
 try:
     from config import SKIP_CALENDARS
 except ImportError:
-    SKIP_CALENDARS = ["Birthdays", "Geburtstage"]   # calendars to leave out
+    SKIP_CALENDARS = ["Birthdays", "Geburtstage"]   
 try:
     from config import TRAIN_DIRECTION
 except ImportError:
-    TRAIN_DIRECTION = "München"                      # direction you usually travel
+    TRAIN_DIRECTION = "München"                     
 
 AGENT_LABEL = "com.lifeassistant.briefing"
 AGENT_PATH = os.path.expanduser(f"~/Library/LaunchAgents/{AGENT_LABEL}.plist")
@@ -47,10 +31,9 @@ class CalendarError(Exception):
     pass
 
 
-# ---------------------------------------------------------------- Apple Calendar
+# For the definition of APple calendar 
 
 def _event_store():
-    """Connect to Apple Calendar, asking for permission the first time."""
     try:
         import EventKit
         from Foundation import NSDate, NSRunLoop
@@ -64,8 +47,7 @@ def _event_store():
         raise CalendarError("No access to Calendar. Allow it in System Settings → "
                             "Privacy & Security → Calendars (turn on PyCharm / Python, "
                             "Full Access).")
-
-    # First time: macOS shows a permission pop-up
+#The permission pop up shows in a mac only once
     store = EventKit.EKEventStore.alloc().init()
     result = {}
 
@@ -114,10 +96,9 @@ def get_events(day):
     return events
 
 
-# ---------------------------------------------------------------- other numbers
+# food data fetching and extraction
 
 def food_today():
-    # Food is logged on the phone/web app, so ask the server first
     from_server = remote.get_today_food()
     if from_server is not None:
         return from_server
@@ -154,7 +135,7 @@ def next_train():
     return min(deps, key=lambda d: d["actual"]) if deps else None
 
 
-# ---------------------------------------------------------------- briefing
+# briefing about the day for a better outlook of me
 
 def _event_line(ev):
     if ev["all_day"]:
@@ -232,7 +213,7 @@ def build_briefing(day=None):
     return "\n".join(lines) + "\n", " · ".join(short)
 
 
-# ---------------------------------------------------------------- notifications
+#notifications and information in the shape of text
 
 def notify(title, message):
     """Show a macOS notification."""
@@ -288,7 +269,7 @@ def turn_off_morning_notification():
         print("  It wasn't turned on.")
 
 
-# ---------------------------------------------------------------- menu
+#set of options to choose from
 
 def run():
     while True:
