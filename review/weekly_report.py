@@ -1,13 +1,4 @@
-"""
-review/weekly_report.py - Weekly review: charts, targets and breaches.
 
-  - This week so far : progress chart, nothing recorded yet
-  - Last week        : final chart, missed targets saved as breaches,
-                       and you can write a note on what got in the way
-  - Look back        : all past breaches with your notes
-
-Charts are saved as images in the reports/ folder and opened automatically.
-"""
 
 import os
 import subprocess
