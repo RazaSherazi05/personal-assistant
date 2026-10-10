@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="head"><p class="eyebrow">Weekly review</p><h1>Week of {{ monday.strftime('%d.%m') }}</h1></header>
+
+<div class="tabs page-tabs">
+  <a href="{{ url_for('review_page', week='this') }}" class="{{ 'on' if which != 'last' }}">This week</a>
+  <a href="{{ url_for('review_page', week='last') }}" class="{{ 'on' if which == 'last' }}">Last week</a>
+</div>
+
+<section class="score">
+  {% for name, label, target, actual, unit, met in results %}
+  <div class="card tile">
+    <p class="muted small">{{ label }}</p>
+    <p class="mid">{% if unit == 'h' %}{{ actual|num(1) }}{% else %}{{ actual|num }}{% endif %} <small>{{ unit }}</small></p>
+    <p class="small {{ ('good' if met else 'bad') if final }}">
+      {% if final %}{{ '✔ Met' if met else '✘ Missed' }}{% else %}{{ 'on track' if met else 'not yet' }}{% endif %}
+      <span class="muted">· target {% if unit == 'h' %}{{ target|num(1) }}{% else %}{{ target|num }}{% endif %}</span></p>
+  </div>
+  {% endfor %}
+</section>
+
+<section class="card">
+  <img class="chart" src="{{ url_for('review_chart', week=monday.isoformat()) }}?v={{ chart_version }}" alt="Charts of calories, German hours and protein per day for this week">
+</section>
+
+<section class="card" id="breaches">
+  <h2>Missed targets</h2>
+  <p class="muted small">Recorded when you open “Last week”. A short note helps you spot patterns.</p>
+  {% if not breaches %}<p class="muted">None recorded yet.</p>{% endif %}
+  {% for b in breaches %}
+    {% if loop.first or b[1] != loop.previtem[1] %}<h3>Week of {{ b[1] }}</h3>{% endif %}
+    <form method="post" action="{{ url_for('review_note', breach_id=b[0]) }}" class="breach">
+      <input type="hidden" name="week" value="{{ which }}">
+      <p><span class="bad">✘</span> {{ labels.get(b[2], b[2]) }}:
+        <b>{% if units.get(b[2]) == 'h' %}{{ b[4]|num(1) }}{% else %}{{ b[4]|num }}{% endif %}</b>
+        <span class="muted">of {% if units.get(b[2]) == 'h' %}{{ b[3]|num(1) }}{% else %}{{ b[3]|num }}{% endif %} {{ units.get(b[2], '') }}</span></p>
+      <div class="inline">
+        <input type="text" name="note" value="{{ b[5] or '' }}" placeholder="What got in the way?">
+        <button class="btn">Save</button>
+      </div>
+    </form>
+  {% endfor %}
+</section>
+{% endblock %}

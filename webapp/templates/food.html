@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="head daynav">
+  <a href="{{ url_for('food_page', d=prev_day.isoformat()) }}" class="arrow" aria-label="Previous day">‹</a>
+  <div>
+    <p class="eyebrow">Food log</p>
+    <h1>{% if day == today %}Today{% else %}{{ day.strftime('%a %d.%m') }}{% endif %}</h1>
+  </div>
+  {% if day < today %}<a href="{{ url_for('food_page', d=next_day.isoformat()) }}" class="arrow" aria-label="Next day">›</a>{% else %}<span class="arrow"></span>{% endif %}
+</header>
+
+<section class="card">
+  <div class="row"><span><b>{{ totals.calories|num }}</b> / {{ goal|num }} kcal</span>
+    <span class="muted">P {{ totals.protein|num }} · F {{ totals.fat|num }} · C {{ totals.carbs|num }} g</span></div>
+  <div class="bar {{ 'over' if totals.calories > goal }}"><i style="width: {{ cal_pct }}%"></i></div>
+</section>
+
+<section class="card">
+  <div class="tabs">
+    <a href="{{ url_for('food_page', d=day.isoformat(), tab='search') }}" class="{{ 'on' if tab == 'search' }}">Search</a>
+    <a href="{{ url_for('food_page', d=day.isoformat(), tab='barcode') }}" class="{{ 'on' if tab == 'barcode' }}">Barcode</a>
+    <a href="{{ url_for('food_page', d=day.isoformat(), tab='manual') }}" class="{{ 'on' if tab == 'manual' }}">Manual</a>
+  </div>
+
+  {% if tab == 'search' %}
+  <form method="get" class="inline">
+    <input type="hidden" name="d" value="{{ day.isoformat() }}">
+    <input type="search" name="q" value="{{ query }}" placeholder="e.g. Haferflocken" required>
+    <button class="btn primary">Search</button>
+  </form>
+  {% for label, v in results %}
+  <form method="post" action="{{ url_for('food_add') }}" class="result">
+    <input type="hidden" name="d" value="{{ day.isoformat() }}">
+    <input type="hidden" name="per100" value="1">
+    <input type="hidden" name="name" value="{{ label }}">
+    {% for k in ['protein','fat','carbs'] %}<input type="hidden" name="{{ k }}" value="{{ v[k] }}">{% endfor %}
+    <input type="hidden" name="kcal" value="{{ v.calories }}">
+    <div class="result-name">{{ label }}<span class="muted"> · {{ v.calories|num }} kcal/100 g</span></div>
+    <div class="inline">
+      <input type="number" name="grams" inputmode="decimal" step="any" min="1" placeholder="grams" required>
+      <button class="btn">Add</button>
+    </div>
+  </form>
+  {% endfor %}
+
+  {% elif tab == 'barcode' %}
+  <form method="post" action="{{ url_for('food_barcode') }}" class="inline">
+    <input type="hidden" name="d" value="{{ day.isoformat() }}">
+    <input type="text" name="code" inputmode="numeric" pattern="[0-9 ]*" placeholder="Numbers under the barcode" required>
+    <button class="btn primary">Look up</button>
+  </form>
+
+  {% else %}
+  <form method="post" action="{{ url_for('food_add') }}" class="grid">
+    <input type="hidden" name="d" value="{{ day.isoformat() }}">
+    <label class="full">What did you eat?<input type="text" name="name" required></label>
+    <label>Calories (kcal)<input type="number" name="kcal" inputmode="decimal" step="any" min="0" required></label>
+    <label>Protein (g)<input type="number" name="protein" inputmode="decimal" step="any" min="0" value="0"></label>
+    <label>Fat (g)<input type="number" name="fat" inputmode="decimal" step="any" min="0" value="0"></label>
+    <label>Carbs (g)<input type="number" name="carbs" inputmode="decimal" step="any" min="0" value="0"></label>
+    <button class="btn primary full">Add</button>
+  </form>
+  {% endif %}
+</section>
+
+<section class="card">
+  <h2>Logged</h2>
+  {% if not entries %}<p class="muted">Nothing logged yet.</p>{% endif %}
+  <ul class="list">
+  {% for e in entries %}
+    <li>
+      <div>
+        <div>{{ e[2] }}</div>
+        <div class="muted small">{{ e[1] }}{% if e[3] %} · {{ e[3]|num }} g{% endif %} · P {{ e[5]|num }} · F {{ e[6]|num }} · C {{ e[7]|num }}</div>
+      </div>
+      <div class="right">
+        <b>{{ e[4]|num }}</b>
+        <form method="post" action="{{ url_for('food_delete', entry_id=e[0]) }}" onsubmit="return confirm('Delete this entry?')">
+          <button class="x" aria-label="Delete">×</button>
+        </form>
+      </div>
+    </li>
+  {% endfor %}
+  </ul>
+</section>
+{% endblock %}

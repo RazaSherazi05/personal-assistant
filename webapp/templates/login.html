@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="login">
+  <img src="{{ url_for('static', filename='icon-180.png') }}" alt="" class="login-icon">
+  <h1>Life Assistant</h1>
+  {% if not_configured %}
+    <p class="muted">Set <code>WEB_PASSWORD</code> in <code>local_settings.py</code> on the server, then reload the web app.</p>
+  {% else %}
+  <form method="post" class="card">
+    <label>Password
+      <input type="password" name="password" autocomplete="current-password" autofocus required>
+    </label>
+    <button class="btn primary">Log in</button>
+  </form>
+  {% endif %}
+</div>
+{% endblock %}

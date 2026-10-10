@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="head">
+  <p class="eyebrow">{{ today.strftime('%A') }}</p>
+  <h1>{{ today.strftime('%d %B') }}</h1>
+</header>
+
+<a class="card link" href="{{ url_for('food_page') }}">
+  <div class="row"><h2>Calories</h2><span class="muted">{{ goal|num }} kcal goal</span></div>
+  <p class="big">{{ totals.calories|num }} <small>kcal eaten</small></p>
+  <div class="bar {{ 'over' if totals.calories > goal }}"><i style="width: {{ cal_pct }}%"></i></div>
+  <p class="sub">
+    {% if totals.calories <= goal %}{{ (goal - totals.calories)|num }} kcal left today
+    {% else %}{{ (totals.calories - goal)|num }} kcal over today's goal{% endif %}
+  </p>
+  <div class="row small-gap">
+    <span>Protein <b>{{ totals.protein|num }}</b> / {{ cfg.DAILY_PROTEIN_TARGET }} g</span>
+    <span class="muted">Fat {{ totals.fat|num }} g · Carbs {{ totals.carbs|num }} g</span>
+  </div>
+  <div class="bar thin"><i style="width: {{ protein_pct }}%"></i></div>
+</a>
+
+<a class="card link" href="{{ url_for('german_page') }}">
+  <div class="row"><h2>German</h2><span class="muted">{{ cfg.WEEKLY_GERMAN_HOURS_TARGET }} h / week</span></div>
+  <p class="big">{{ week_hours|num(1) }} <small>h this week</small></p>
+  <div class="bar"><i style="width: {{ german_pct }}%"></i></div>
+  <p class="sub">
+    Today {{ today_hours|num(1) }} h ·
+    {% if per_day_needed > 0 %}about {{ per_day_needed|num(1) }} h/day to reach the target
+    {% else %}weekly target reached 🎉{% endif %}
+  </p>
+</a>
+
+<a class="card link" href="{{ url_for('trains_page') }}">
+  <div class="row"><h2>Next to {{ cfg.TRAIN_DIRECTION }}</h2><span class="muted">from {{ cfg.HOME_STATION_NAME }}</span></div>
+  <div id="train"><p class="muted">Loading…</p></div>
+</a>
+
+<p class="center"><a href="{{ url_for('logout') }}" class="muted">Log out</a></p>
+<script>
+  fetch("{{ url_for('next_train_fragment') }}").then(r => r.text())
+    .then(html => { document.getElementById("train").innerHTML = html; })
+    .catch(() => { document.getElementById("train").innerHTML = '<p class="muted">Offline</p>'; });
+</script>
+{% endblock %}

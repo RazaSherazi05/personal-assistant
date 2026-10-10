@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<header class="head"><p class="eyebrow">Barcode found</p><h1>{{ label }}</h1></header>
+<form method="post" action="{{ url_for('food_add') }}" class="card">
+  <p>{{ v.calories|num }} kcal · P {{ v.protein|num(1) }} · F {{ v.fat|num(1) }} · C {{ v.carbs|num(1) }} <span class="muted">per 100 g</span></p>
+  <input type="hidden" name="d" value="{{ d }}">
+  <input type="hidden" name="per100" value="1">
+  <input type="hidden" name="name" value="{{ label }}">
+  <input type="hidden" name="kcal" value="{{ v.calories }}">
+  {% for k in ['protein','fat','carbs'] %}<input type="hidden" name="{{ k }}" value="{{ v[k] }}">{% endfor %}
+  <label>How many grams?<input type="number" name="grams" inputmode="decimal" step="any" min="1" autofocus required></label>
+  <button class="btn primary">Add</button>
+</form>
+<p class="center"><a href="{{ url_for('food_page', d=d) }}" class="muted">Cancel</a></p>
+{% endblock %}

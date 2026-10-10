@@ -1,0 +1,16 @@
+# Personal settings and keys - never upload
+local_settings.py
+
+# Your personal data
+data/
+reports/
+*.db
+*.lock
+
+# Python / editor
+venv/
+.venv/
+__pycache__/
+*.pyc
+.idea/
+.DS_Store

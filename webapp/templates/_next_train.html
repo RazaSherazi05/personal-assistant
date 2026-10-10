@@ -1,0 +1,10 @@
+{% if not deps %}<p class="muted">No train in the next hour.</p>{% endif %}
+{% for t in deps %}
+<div class="dep">
+  <span class="time">{{ t.actual.strftime('%H:%M') }}</span>
+  <span class="line">{{ t.line }}</span>
+  <span class="dest">{{ t.direction }}</span>
+  <span class="when">{% set m = ((t.actual - now).total_seconds() // 60)|int %}in {{ m }} min</span>
+</div>
+<p class="sub">{% if t.delay > 0 %}<span class="late">+{{ t.delay }} min</span> · {% endif %}{% if t.platform %}Gl. {{ t.platform }}{% if t.platform_changed %} <span class="late">changed</span>{% endif %}{% endif %}</p>
+{% endfor %}
