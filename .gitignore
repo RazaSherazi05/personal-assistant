@@ -14,8 +14,3 @@ __pycache__/
 *.pyc
 .idea/
 .DS_Store
-DEPLOY.md
-DEPLOY.md
-webapp/
-wsgi.py
-remote.py
