@@ -1,14 +1,3 @@
-"""
-collectors/trains.py - Live departures from Deutsche Bahn.
-
-Uses DB's official Timetables API (DB API Marketplace, free plan).
-Your Client ID and API key live in config.py.
-
-How the API works:
-  /plan/{station}/{YYMMDD}/{HH}  -> the planned timetable for one hour
-  /fchg/{station}                -> live changes: delays, cancellations, platforms
-We combine the two.
-"""
 
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
