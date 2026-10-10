@@ -1,13 +1,4 @@
-"""
-collectors/food.py - Log what you eat.
 
-Ways to add food:
-  1. Search by name   (fresh food, e.g. "banana", "Haferflocken")
-  2. Barcode number   (packaged food from REWE, Lidl, Aldi ...)
-  3. Manual entry     (restaurant meals, home recipes)
-
-Nutrition data comes from Open Food Facts (free, no account needed).
-"""
 
 from datetime import datetime
 
