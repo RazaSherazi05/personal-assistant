@@ -1,7 +1,3 @@
-"""
-database.py - Creates the database and all tables.
-Run this file once. It is safe to run again: existing data is never deleted.
-"""
 
 import os
 import sqlite3
@@ -34,7 +30,7 @@ def create_tables(verbose=True):
         )
     """)
 
-    # Each German study session (clock in / clock out)
+    # Counts time for each study session autmatically
     cur.execute("""
         CREATE TABLE IF NOT EXISTS german_sessions (
             id        INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,7 +41,7 @@ def create_tables(verbose=True):
         )
     """)
 
-    # Missed targets, plus your own note on what went wrong
+    # Missed goals and breaches notifier
     cur.execute("""
         CREATE TABLE IF NOT EXISTS breaches (
             id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -56,8 +52,6 @@ def create_tables(verbose=True):
             note        TEXT                  -- your reflection, added later
         )
     """)
-
-    # Added later: marks German sessions already sent to the web server
     columns = [row[1] for row in cur.execute("PRAGMA table_info(german_sessions)")]
     if "synced" not in columns:
         cur.execute("ALTER TABLE german_sessions ADD COLUMN synced INTEGER DEFAULT 0")
