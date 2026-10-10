@@ -1,6 +1,6 @@
 # Life Assistant
 
-A personal assistant that tracks the things I want to improve every day, checks every week whether I hit my targets, and keeps a record of what got in the way when I didn't.
+A personal assistant that tracks the things I want to improve and I can personalise according to my needs. It checks every week whether I hit my targets, and keeps a record of what got in the way when I didn't. It helps to build a more disciplined and scheduled lifestyle.
 
 ![Today, food log and weekly review on a phone](docs/preview.png)
 
