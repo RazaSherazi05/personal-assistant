@@ -1,20 +1,4 @@
-"""
-collectors/german_tracker.py - Automatic clock-in / clock-out for German study.
 
-How it works:
-  Every 15 seconds it asks Safari which page is in front.
-  - Safari is the active app AND the page is on your learning site -> clocked in
-  - You switch tab/app, close Safari, or are idle 5+ minutes      -> clocked out
-
-The session is saved to the database while it runs, so even if the script
-stops unexpectedly you lose at most 15 seconds.
-
-Two ways to run it:
-  - In the background (recommended): main.py -> 2 -> "Run automatically".
-    It then starts by itself whenever you log in, no PyCharm needed.
-  - By hand: run this file in PyCharm and leave it running.
-macOS will ask once to let PyCharm / Python control Safari -> click Allow.
-"""
 
 import fcntl
 import os
